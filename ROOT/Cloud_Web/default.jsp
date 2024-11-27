@@ -1,5 +1,10 @@
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="cloud.ApplyDAO, cloud.Apply, cloud.DBConnection" %>
+
+<%
+int isApply = 0;
+%>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -9,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>웹개발 홈페이지</title>
     <link rel="stylesheet" href="/Cloud_Web/styles/nav4_styles.css">
+
 </head>
 
 <body>
@@ -21,6 +27,7 @@
             <% 
             if (session != null && session.getAttribute("userId") != null) { 
                 String userName = (String) session.getAttribute("userName");
+                isApply = (int) session.getAttribute("isApply");
             %>
                 안녕하세요,  <%= userName %> 님
                 <a href="/Cloud_Web/login/logout.jsp" id="logout">로그아웃</a>
@@ -34,8 +41,21 @@
             </div>
         </div>
     </header>
+                
+    <script>
+        function alreadyApply(event) {
+            var isApply = '<%= isApply %>';
+            if (isApply == 1) {
+            alert("이미 가입신청을 하셨습니다.");
+            event.preventDefault();
+            }
+        }
+    </script>     
+ 
 
     <nav id="nav1">
+    
+    
         <ul class="nav-menu">
             <li><a href="/Cloud_Web/introduce.jsp">동아리 소개</a></li>
             <% 
@@ -44,8 +64,9 @@
                 <li><a href="/Cloud_Web/apply/list.jsp">가입신청 관리</a></li>
             <% 
             } else { 
-            %>
-                <li><a href="/Cloud_Web/apply/apply.jsp">가입신청</a></li>
+            %>  
+                
+                <li><a href="/Cloud_Web/apply/apply.jsp" onclick="alreadyApply(event)">가입신청</a></li>
             <% } %>
             <li><a href="/Cloud_Web/activity/list.jsp">활동내역</a></li>
             <li><a href="/Cloud_Web/notification/list.jsp">공지사항</a></li>

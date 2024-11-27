@@ -116,6 +116,7 @@ public class ApplyDAO {
         int totalApplies = 0;
         String sql = "SELECT COUNT(*) FROM apply";
         try (PreparedStatement pstmt = conn.prepareStatement(sql);
+        
              ResultSet rs = pstmt.executeQuery()) {
             if (rs.next()) {
                 totalApplies = rs.getInt(1);
@@ -123,6 +124,23 @@ public class ApplyDAO {
         }
         return totalApplies;
     }
+
+    public int getisApply(String userId) throws SQLException{
+        String sql = "select isApply from apply where userId = ?";
+        int isApply=0;
+        
+        try(PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setString(1,userId);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+            isApply=rs.getInt("isApply");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return isApply;
+    }
+
 
     // UPDATE
     public void updateApply(Apply apply) throws SQLException {
@@ -145,6 +163,31 @@ public class ApplyDAO {
         String sql = "DELETE FROM apply WHERE id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public void updateisMember(int id) throws SQLException{
+        String sql = "select userId from apply where id =?";
+        try(PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setInt(1,id);
+            try(ResultSet rs = pstmt.executeQuery()){
+                if(rs.next()){
+                    String userId = rs.getString("userId");
+                    sql = "update user set isMember = 1 where userId = ?";
+                    try(PreparedStatement pstmt2 = conn.prepareStatement(sql)){
+                        pstmt2.setString(1,userId);
+                        pstmt2.executeUpdate();
+                    }
+                }
+            }
+        }
+    }
+
+    public void updateisApply(int id) throws SQLException{
+        String sql = "update apply set isApply=1 where id=?";
+        try(PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setInt(1,id);
             pstmt.executeUpdate();
         }
     }

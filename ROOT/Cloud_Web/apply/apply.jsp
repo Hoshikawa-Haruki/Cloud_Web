@@ -15,6 +15,7 @@
         String department = request.getParameter("department");
         String introduction = request.getParameter("introduction");
         String interest = request.getParameter("interest");
+        
 
         // 새로운 Apply 객체 생성
         Apply apply = new Apply();
@@ -27,7 +28,7 @@
         apply.setInterest(interest);
 
         //TODO : 로그인된 유저의 id 넣어주기 (userId);
-        apply.setUserId(interest);
+        apply.setUserId(session.getAttribute("userId").toString());
     
 
         // DAO로 DB에 추가
@@ -73,7 +74,7 @@
                             </tr>
 
                             <tr>
-                                <td><input type="text" id="name" name="name" placeholder="홍길동"></td>
+                                <td><input type="text" id="name" name="name" value="<%= session.getAttribute("userName")%>" readonly></td>
                                 <td><input type="text" id="studentId" name="studentId" placeholder="20000000"></td>
                             </tr>
 
@@ -84,8 +85,8 @@
                             </tr>
 
                             <tr>
-                                <td><input type="tel" id="phone" name="phone" placeholder="010-1234-5678"></td>
-                                <td><input type="email" id="email" name="email" placeholder="example@email.com"></td>
+                                <td><input type="tel" id="phone" name="phone" value="<%=session.getAttribute("phone")%>" readonly></td>
+                                <td><input type="email" id="email" name="email" value="<%=session.getAttribute("email")%>" readonly></td>
                             </tr>
 
                             <tr>

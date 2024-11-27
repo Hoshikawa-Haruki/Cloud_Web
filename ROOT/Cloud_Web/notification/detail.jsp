@@ -41,7 +41,7 @@
             </p>
             <% } %>           
             </div>
-            <a class="back-btn" href="list.jsp">돌아가기</a>
+            <input type="button" class="back" value="뒤로가기" onclick="history.back()">
     </div>
     <% } else { %>
             <p>해당 공지사항을 찾을 수 없습니다.</p>

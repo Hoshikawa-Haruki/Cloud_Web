@@ -11,7 +11,7 @@
     List<Apply> applies = applyDAO.getApplies(currentPage, pageSize);
     int totalApply = applyDAO.getTotalApplies(); // 총 게시글 수
     int totalPages = (int) Math.ceil((double) totalApply / pageSize); // 총 페이지 수
-
+    
 %>
 
 <!DOCTYPE html>
@@ -22,6 +22,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>신청서 목록</title>
     <link rel="stylesheet" href="/Cloud_Web/styles/community_styles.css"> <!-- CSS 파일 링크 -->
+    <script>
+        function alreadyApply(event, isApply){
+            console.log(isApply);
+            if(isApply == 1){
+                event.preventDefault();
+                alert('이미 승인된 신청서입니다.');
+            }
+        }
+    </script>
+    
 </head>
 
 <body>
@@ -62,7 +72,8 @@
                                         <%= apply.getId() %>
                                     </td>
                                     <td>
-                                        <a href="detail.jsp?id=<%= apply.getId() %>">
+                                        
+                                        <a href="detail.jsp?id=<%= apply.getId() %>" onclick="alreadyApply(event,<%=apply.getIsApply()%>)">
                                             <%= apply.getName() %> 님의 신청서
                                         </a>
                                     </td>

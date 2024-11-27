@@ -1,5 +1,5 @@
 <%@ page import="javax.servlet.http.HttpSession" %>
-<%@ page import="cloud.UserDAO, cloud.DBConnection, cloud.User" %>
+<%@ page import="cloud.UserDAO, cloud.DBConnection, cloud.User, cloud.ApplyDAO, cloud.Apply" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%
     if (request.getMethod().equalsIgnoreCase("POST"))  {
@@ -10,17 +10,23 @@
             UserDAO userDAO = new UserDAO(DBConnection.getConnection());
             User user = userDAO.getUserByUserId(userIdInput);
             if(user != null) {
+
             String dbUserId = user.getUserId();
             String dbUserPw = user.getPassword();
+            ApplyDAO applyDAO = new ApplyDAO(DBConnection.getConnection());
+            int isApply = applyDAO.getisApply(dbUserId);
+
                 if (userIdInput.equals(dbUserId) && userPwInput.equals(dbUserPw)) {
                     // 세션 생성
                     // HttpSession session = request.getSession();
                     session.setAttribute("userId", user.getUserId()); // 세션에 userId 저장
                     session.setAttribute("userName", user.getName()); // 세션에 사용자 이름 저장
                     session.setAttribute("userNickName", user.getNickname()); // 세션에 사용자 닉네임 저장
+                    session.setAttribute("phone",user.getPhone()); // 세션에 사용자 전화번호 저장
+                    session.setAttribute("email",user.getEmail()); // 세션에 사용자 이메일 저장
                     session.setAttribute("isMember", user.getMember()); // 세션에 사용자 닉네임 저장
                     session.setAttribute("isAdmin", user.getAdmin()); // 세션에 사용자 닉네임 저장
-
+                    session.setAttribute("isApply", isApply); // 세션에 사용자 승인 여부 저장
                     
                     out.println("<script> alert('로그인 성공.'); location.href='/Cloud_Web/default.jsp'; </script>"); // 로그인 성공 시 default 화면으로 이동
                 } else {
