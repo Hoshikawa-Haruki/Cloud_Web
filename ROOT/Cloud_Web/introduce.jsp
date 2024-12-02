@@ -1,4 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="cloud.User, cloud.DBConnection, cloud.UserDAO" %>
+
+<%  
+    Boolean isMember2 = null;
+    if(session!=null && session.getAttribute("userId")!=null){
+        UserDAO userDAO = new UserDAO(DBConnection.getConnection());
+        User user = userDAO.getUserByUserId(session.getAttribute("userId").toString());
+        isMember2 = user.getMember();
+    }
+%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -7,6 +17,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>코딩 동아리 소개</title>
     <link rel="stylesheet" href="/Cloud_Web/styles/introduce_styles.css">
+    <script>
+        function isMember(event){
+            var isMember="<%=isMember2%>";
+            if(isMember=="true"){
+                alert("이미 가입이 완료되었습니다.");
+                event.preventDefault();
+            }
+            else if(isMember==null){
+                alert("로그인 후 이용해주세요.");
+                event.preventDefault();
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -33,7 +56,7 @@
 
             <h2>가입 안내</h2>
             <p>코딩에 관심 있는 누구나 환영합니다! 아래 링크를 통해 가입 신청을 해주세요.</p>
-            <a href="/Cloud_Web/apply/apply.jsp" class="apply-btn">가입 신청하기</a>
+            <a href="/Cloud_Web/apply/apply.jsp" class="apply-btn" onclick="isMember(event)">가입 신청하기</a>
         </article>
     </main>
 </body>

@@ -37,7 +37,7 @@
             <div class="post-content">
             <p><%= post.getContent() %></p>
              </div>
-            <input type="button" class="back" value="뒤로가기" onclick="history.back()">
+            <button onclick="history.back()">뒤로가기</button>
     </div>
     <% } else { %>
             <p>해당 게시글을 찾을 수 없습니다.</p>

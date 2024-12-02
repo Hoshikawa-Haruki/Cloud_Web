@@ -16,16 +16,23 @@
         String introduction = request.getParameter("introduction");
         String interest = request.getParameter("interest");
         
-
+        
         // 새로운 Apply 객체 생성
-        Apply apply = new Apply();
-        apply.setName(name);
-        apply.setStudentNumber(studentId);
-        apply.setPhone(phone);
-        apply.setEmail(email);
-        apply.setDepartment(department);
-        apply.setIntroduction(introduction);
-        apply.setInterest(interest);
+        if( studentId == null || studentId.trim().isEmpty() ||
+            department == null || department.trim().isEmpty())
+            {
+            out.println("<script> alert('학번과 학과명을 입력해주세요.');</script>");
+            }
+        else {
+            Apply apply = new Apply();
+            apply.setName(name);
+            apply.setStudentNumber(studentId);
+            apply.setPhone(phone);
+            apply.setEmail(email);
+            apply.setDepartment(department);
+            apply.setIntroduction(introduction);
+            apply.setInterest(interest);
+        
 
         //TODO : 로그인된 유저의 id 넣어주기 (userId);
         apply.setUserId(session.getAttribute("userId").toString());
@@ -34,6 +41,9 @@
         // DAO로 DB에 추가
         ApplyDAO applyDao = new ApplyDAO(DBConnection.getConnection());
         applyDao.createApply(apply);
+
+        out.println("<script> alert('신청이 완료되었습니다.'); location.href='/Cloud_Web/apply/apply.jsp'; </script>");
+        }
 
     }
 %>

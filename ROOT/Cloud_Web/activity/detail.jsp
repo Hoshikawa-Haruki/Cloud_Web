@@ -44,7 +44,7 @@
             </div>
             <% } %>           
             </div>
-            <input type="button" class="back" value="뒤로가기" onclick="history.back()">
+            <button onclick="history.back()">뒤로가기</button>
     </div>
     <% } else { %>
             <p>해당 공지사항을 찾을 수 없습니다.</p>

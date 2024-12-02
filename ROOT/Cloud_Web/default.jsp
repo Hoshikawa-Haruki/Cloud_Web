@@ -3,7 +3,7 @@
 <%@ page import="cloud.ApplyDAO, cloud.Apply, cloud.DBConnection" %>
 
 <%
-int isApply = 0;
+Boolean isMember = null;
 %>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
@@ -21,13 +21,13 @@ int isApply = 0;
     <header>
         <div class="header-container">
             <div id="logo">
-                <a href="/Cloud_Web/index.jsp"><img src="/Cloud_Web/images/logo.png" alt="로고"></a>
+                <a href="/Cloud_Web/index.jsp"><img src="/Cloud_Web/images/logo3.png" alt="로고"></a>
             </div>
             <div id="auth">
             <% 
             if (session != null && session.getAttribute("userId") != null) { 
                 String userName = (String) session.getAttribute("userName");
-                isApply = (int) session.getAttribute("isApply");
+                isMember = (Boolean) session.getAttribute("isMember");
             %>
                 안녕하세요,  <%= userName %> 님
                 <a href="/Cloud_Web/login/logout.jsp" id="logout">로그아웃</a>
@@ -44,10 +44,18 @@ int isApply = 0;
                 
     <script>
         function alreadyApply(event) {
-            var isApply = '<%= isApply %>';
-            if (isApply == 1) {
-            alert("이미 가입신청을 하셨습니다.");
+            var isMember = "<%= isMember %>";
+            if (isMember == "true") {
+            alert("이미 가입이 완료되었습니다.");
             event.preventDefault();
+            }
+        }
+
+        function checkMember(event){
+            var isMember = "<%= isMember %>";
+            if(isMember == "false"){
+                alert("가입신청을 먼저 해주세요.");
+                event.preventDefault();
             }
         }
     </script>     
@@ -70,8 +78,8 @@ int isApply = 0;
             <% } %>
             <li><a href="/Cloud_Web/activity/list.jsp">활동내역</a></li>
             <li><a href="/Cloud_Web/notification/list.jsp">공지사항</a></li>
-            <li><a href="/Cloud_Web/community/list.jsp">커뮤니티</a></li>
-            <li><a href="http://223.130.154.161:8080/openai.html">OpenAI</a></li>
+            <li><a href="/Cloud_Web/community/list.jsp" onclick="checkMember(event)">커뮤니티</a></li>
+            <li><a href="http://223.130.154.161:8080/openai.html" onclick="checkMember(event)">OpenAI</a></li>
         </ul>
     </nav>
 </body>

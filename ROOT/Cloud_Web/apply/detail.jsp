@@ -1,19 +1,30 @@
 <%@ include file="/Cloud_Web/includes/sessionAdminCheck.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="cloud.ApplyDAO, cloud.DBConnection, cloud.Apply" %>
+<%@ page import="cloud.ApplyDAO, cloud.DBConnection, cloud.Apply, cloud.UserDAO, cloud.User" %>
 <%@ page import="java.sql.*"%>
 
 <%
 String applyId = request.getParameter("id");
 ApplyDAO applyDAO = new ApplyDAO(DBConnection.getConnection());
+UserDAO userDAO = new UserDAO(DBConnection.getConnection());
 int id = Integer.parseInt(applyId);
+Apply apply = applyDAO.getApplyById(id);
+User user = userDAO.getUserByUserId(apply.getUserId());
 
 if (request.getMethod().equalsIgnoreCase("POST")) {
-    if(applyId != null) {
-        applyDAO.updateisMember(id);
-        applyDAO.updateisApply(id);
-        out.println("<script> alert('승인되었습니다.'); location.href='/Cloud_Web/apply/list.jsp'; </script>");
+
+    if(apply.getIsApply()==0 && user.getMember()==false){
+
+        if(applyId != null) {
+            applyDAO.updateisMember(id);
+            applyDAO.updateisApply(id);
+            out.println("<script> alert('승인되었습니다.'); location.href='/Cloud_Web/apply/list.jsp'; </script>");
+        }
+
+    }else{
+        out.println("<script> alert('이미 가입된 회원입니다.'); location.href='/Cloud_Web/apply/list.jsp'; </script>");
     }
+
 }
 %>
 
@@ -33,9 +44,6 @@ if (request.getMethod().equalsIgnoreCase("POST")) {
         // 게시글 ID를 request 파라미터에서 가져옴
         if (applyId != null) {
 
-            // getApplyById 메서드 호출해서 게시글 가져오기
-            Apply apply = applyDAO.getApplyById(id);
-             
             if (apply != null) {
     %>
     <div class="apply-details">
@@ -55,12 +63,14 @@ if (request.getMethod().equalsIgnoreCase("POST")) {
              </div>
 
             
-            <div class="buttons">
-            <form method="post" class="buttonsForm">
-                <input type="button" class="back" value="뒤로가기" onclick="history.back()">
-                <input class="submit-btn" type="submit" value="승인" >
+           
+            <form method="post">
+                <div class="button_container">
+                <button onclick="history.back()">뒤로가기</button>
+                <input class="submit_btn" type="submit" value="승인" >
+                </div>
             </form>
-            </div> 
+            
             
     </div>
     <% } else { %>
